@@ -30,18 +30,46 @@
                env(safe-area-inset-bottom) env(safe-area-inset-left);
       box-sizing: border-box;
     }
-    .qr {
-      display: block;
+    #qr {
       /* About half the screen width, never taller than half the screen */
       width: min(50vw, 50vh, 360px);
-      height: auto;
-      image-rendering: pixelated;
-      -webkit-user-select: none;
-      user-select: none;
+      aspect-ratio: 1 / 1;
+    }
+    #qr svg {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
 <body>
-  <img class="qr" src="qr.png" alt="QR code">
+  <div id="qr" role="img" aria-label="QR code"></div>
+
+  <script src="qrcode.js"></script>
+  <script>
+    // The payment link that the QR code holds. Change this line to use a new link.
+    var PAY_LINK = "https://www.dbs.com.sg/personal/mobile/paylink/index.html?tranRef=CJ4GsCGAYU";
+
+    var qr = qrcode(0, "M");   // 0 = pick the size automatically, M = medium error correction
+    qr.addData(PAY_LINK);
+    qr.make();
+
+    // Draw the QR code as SVG, so that it stays sharp at any size.
+    var count = qr.getModuleCount();
+    var quiet = 4;             // white border around the code, in modules
+    var size = count + quiet * 2;
+    var path = "";
+    for (var r = 0; r < count; r++) {
+      for (var c = 0; c < count; c++) {
+        if (qr.isDark(r, c)) {
+          path += "M" + (c + quiet) + "," + (r + quiet) + "h1v1h-1z";
+        }
+      }
+    }
+    document.getElementById("qr").innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + size + " " + size +
+      '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/>' +
+      '<path fill="#000" d="' + path + '"/></svg>';
+  </script>
 </body>
 </html>
