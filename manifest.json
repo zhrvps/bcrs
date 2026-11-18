@@ -1,0 +1,11 @@
+{
+  "name": "瓶子",
+  "short_name": "瓶子",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#e3f1e4",
+  "theme_color": "#e3f1e4",
+  "icons": [
+    { "src": "icon.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}
